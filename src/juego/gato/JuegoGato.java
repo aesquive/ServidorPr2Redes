@@ -3,9 +3,10 @@ package juego.gato;
 import util.Util;
 
 /**
+ * Un juego de gato donde son 2 jugadores 
  * El signo del jugador1 siempre es X , y del jugador2 siempre es O
  *
- * @author Alberto
+ * @author Alberto Emmanuel Esquivel Vega
  */
 class JuegoGato {
 
@@ -244,14 +245,10 @@ class JuegoGato {
         }
     }
 
-    public static void main(String[] args) {
-        while (true) {
-
-        int pos = (int) (Math.random() * 1);
-            System.out.println(pos);
-        }
-    }
-
+    
+    /**
+     * la IA coloca un valor en alguna posicion del gato
+     */
     private void colocarIA() {
         boolean jugada=false;
         while(!jugada){

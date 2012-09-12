@@ -3,8 +3,9 @@ package juego.gato;
 import servidor.ayudante.AyudanteServidor;
 
 /**
- *
+ * Clase que es un jugador de gato que mantiene turno , status y saber si aun sigue activo
  * @author Alberto Emmanuel Esquivel Vega
+ * 
  */
 public class JugadorGato {
 
