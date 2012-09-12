@@ -1,20 +1,28 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package juego.gato;
 
 import servidor.ayudante.AyudanteServidor;
 
 /**
  *
- * @author Alberto
+ * @author Alberto Emmanuel Esquivel Vega
  */
 public class JugadorGato {
 
+    /**
+     * variable que nos dice si el jugador tiene el turno
+     */
     private boolean tieneTurno;
+    /**
+     * variable que nos dice si el jugador sigue activo en el juego
+     */
     private boolean juegoActivo;
+    /**
+     * variable que nos dice el status del jugador
+     */
     private int status;
+    /**
+     * ayudante de servidor que mantiene la conexion con el cliente
+     */
     private AyudanteServidor ayudanteServidor;
 
     public final static int STATUS_ENJUEGO=1;
@@ -22,6 +30,10 @@ public class JugadorGato {
     public final static int STATUS_PERDIDO=3;
     public final static int STATUS_EMPATADO=4;
     
+    /**
+     * Constructor
+     * @param ayudanteServidor 
+     */
     public JugadorGato(AyudanteServidor ayudanteServidor) {
         this.status=STATUS_ENJUEGO;
         this.ayudanteServidor=ayudanteServidor;

@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package juego.ahorcado;
 
 import servidor.ayudante.AyudanteServidor;
@@ -9,7 +5,7 @@ import util.Util;
 
 /**
  *
- * @author Alberto
+ * @author Alberto Emmanuel Esquivel Vega
  * Clase que se encarga de administrar el juego de ahorcado de un cliente 
  */
 public class AdministradorAhorcado {

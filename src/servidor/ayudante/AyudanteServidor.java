@@ -3,7 +3,6 @@ package servidor.ayudante;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.Stack;
 import juego.ahorcado.AdministradorAhorcado;
 import juego.gato.AdministradorGato;
 import servidor.Servidor;

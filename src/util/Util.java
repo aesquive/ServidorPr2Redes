@@ -22,6 +22,11 @@ public class Util {
         }
     }
 
+    /**
+     * metodo que convierte un arreglo de caracteres en un arreglo
+     * @param arreglo
+     * @return 
+     */
     public static String arrayToString(char[] arreglo) {
         StringBuilder builder=new StringBuilder();
         for(int t=0;t<arreglo.length;t++){
@@ -30,6 +35,12 @@ public class Util {
         return builder.toString().substring(0,builder.toString().length()-1);
     }
 
+    /**
+     * nos dice si el arreglo de caracteres contiene al elemento
+     * @param arreglo
+     * @param elemento
+     * @return 
+     */
     public static boolean arregloContiene(char[] arreglo, char elemento) {
         for(int t=0;t<arreglo.length;t++){
             if(arreglo[t]==elemento){
