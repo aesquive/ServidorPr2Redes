@@ -11,11 +11,13 @@ class JuegoGato {
 
     private JugadorGato jugador1;
     private JugadorGato jugador2;
+    private int numeroJugadores;
     private char[] arregloGato = {'_', '_', '_', '_', '_', '_', '_', '_', '_'};
 
-    public JuegoGato(JugadorGato jugador1, JugadorGato jugador2) {
+    public JuegoGato(int numeroJugadores, JugadorGato jugador1, JugadorGato jugador2) {
         this.jugador1 = jugador1;
         this.jugador2 = jugador2;
+        this.numeroJugadores = numeroJugadores;
     }
 
     /**
@@ -75,15 +77,20 @@ class JuegoGato {
                     && arregloGato[Integer.parseInt(String.valueOf(jugada.charAt(0)))] == arregloGato[Integer.parseInt(String.valueOf(jugada.charAt(2)))]
                     && arregloGato[Integer.parseInt(String.valueOf(jugada.charAt(0)))] == 'X') {
                 jugador1.setStatus(JugadorGato.STATUS_GANADO);
-                jugador2.setStatus(JugadorGato.STATUS_PERDIDO);
+                if (jugador2 != null) {
+
+                    jugador2.setStatus(JugadorGato.STATUS_PERDIDO);
+                }
                 return;
             }
             //vemos si gano el jugador 2
             if (arregloGato[Integer.parseInt(String.valueOf(jugada.charAt(0)))] == arregloGato[Integer.parseInt(String.valueOf(jugada.charAt(1)))]
                     && arregloGato[Integer.parseInt(String.valueOf(jugada.charAt(0)))] == arregloGato[Integer.parseInt(String.valueOf(jugada.charAt(2)))]
                     && arregloGato[Integer.parseInt(String.valueOf(jugada.charAt(0)))] == 'O') {
-                jugador2.setStatus(JugadorGato.STATUS_GANADO);
                 jugador1.setStatus(JugadorGato.STATUS_PERDIDO);
+                if (jugador2 != null) {
+                    jugador2.setStatus(JugadorGato.STATUS_GANADO);
+                }
                 return;
             }
         }
@@ -96,18 +103,23 @@ class JuegoGato {
         }
 
         jugador1.setStatus(JugadorGato.STATUS_EMPATADO);
-        jugador2.setStatus(JugadorGato.STATUS_EMPATADO);
+        if (jugador2 != null) {
+
+            jugador2.setStatus(JugadorGato.STATUS_EMPATADO);
+        }
     }
 
     /**
-     * Genera la respuesta dependiendo del mensaje que esta reciendo , el jugador es el que esta llamando al metodo
+     * Genera la respuesta dependiendo del mensaje que esta reciendo , el
+     * jugador es el que esta llamando al metodo
+     *
      * @param jugadorSolicitante
-     * @param mensaje 
+     * @param mensaje
      */
     private void generarRespuesta(JugadorGato jugadorSolicitante, String mensaje) {
         JugadorGato competidor = jugadorSolicitante.equals(jugador1) ? jugador2 : jugador1;
         if (mensaje.contains("STATUS GAME")) {
-            statusGameNoSolo(jugadorSolicitante, competidor, mensaje);
+            statusGame(jugadorSolicitante, competidor, mensaje);
             return;
         }
 
@@ -121,24 +133,23 @@ class JuegoGato {
             return;
         }
         if (mensaje.contains("QUIT GAME")) {
-                jugadorSolicitante.getAyudanteServidor().enviarMensaje("<OK>");
-                jugadorSolicitante.setJuegoActivo(false);
-                return;
+            jugadorSolicitante.getAyudanteServidor().enviarMensaje("<OK>");
+            jugadorSolicitante.setJuegoActivo(false);
+            return;
         }
         jugadorSolicitante.getAyudanteServidor().enviarMensaje("<FAIL 400>");
     }
 
-    void juegaSolo() {
-    }
-
     /**
-     * metodo que responde al comando STATUS GAME hecho por el jugadorSolicitante
+     * metodo que responde al comando STATUS GAME hecho por el
+     * jugadorSolicitante
+     *
      * @param jugadorSolicitante
      * @param competidor
-     * @param mensaje 
+     * @param mensaje
      */
-    private void statusGameNoSolo(JugadorGato jugadorSolicitante, JugadorGato competidor, String mensaje) {
-        //en caso en que aun no exista rival
+    private void statusGame(JugadorGato jugadorSolicitante, JugadorGato competidor, String mensaje) {
+        
         if (jugadorSolicitante.getStatus() == JugadorGato.STATUS_GANADO) {
             jugadorSolicitante.getAyudanteServidor().enviarMensaje("<YOU_WIN>");
             jugadorSolicitante.getAyudanteServidor().setStatusUltimoJuego("<YOU_WIN>");
@@ -157,12 +168,12 @@ class JuegoGato {
             jugadorSolicitante.setJuegoActivo(false);
             return;
         }
-        if (competidor == null) {
+        if (numeroJugadores == 2 && competidor == null) {
             jugadorSolicitante.getAyudanteServidor().enviarMensaje("<WAIT_PLAYER>");
             return;
         }
         //en el caso que algun jugador haya terminado el juego
-        if (!competidor.isJuegoActivo()) {
+        if (numeroJugadores == 2 && !competidor.isJuegoActivo()) {
             jugadorSolicitante.getAyudanteServidor().enviarMensaje("<FINISHED_GAME_BY_USER " + competidor.getAyudanteServidor().getId() + ">");
             jugadorSolicitante.getAyudanteServidor().setStatusUltimoJuego("<FINISHED_GAME_BY_USER " + competidor.getAyudanteServidor().getId() + ">");
             jugadorSolicitante.setJuegoActivo(false);
@@ -173,15 +184,17 @@ class JuegoGato {
             jugadorSolicitante.getAyudanteServidor().enviarMensaje("<true " + Util.arrayToString(this.arregloGato) + ">");
             return;
         }
+        
         jugadorSolicitante.getAyudanteServidor().enviarMensaje("<false " + Util.arrayToString(arregloGato) + ">");
         return;
     }
 
     /**
      * Metodo que responde al comando COLOCAR hecho por el jugadorSolicitante
+     *
      * @param jugadorSolicitante
      * @param competidor
-     * @param mensaje 
+     * @param mensaje
      */
     private void colocarNoSolo(JugadorGato jugadorSolicitante, JugadorGato competidor, String mensaje) {
         if (!jugadorSolicitante.isTieneTurno()) {
@@ -208,8 +221,16 @@ class JuegoGato {
             if (jugadorSolicitante.equals(jugador1)) {
                 this.arregloGato[numero.intValue() - 1] = 'X';
                 jugadorSolicitante.setTieneTurno(false);
-                competidor.setTieneTurno(true);
                 jugadorSolicitante.getAyudanteServidor().enviarMensaje("<OK>");
+                //verificamos si el juego es de 1 jugador
+                if(numeroJugadores==1){
+                    //colocamos el valor de la IA y pasamos el turno
+                    colocarIA();
+                    jugadorSolicitante.setTieneTurno(true);
+                }
+                else {
+                    competidor.setTieneTurno(true);
+                }
                 return;
             }
             if (jugadorSolicitante.equals(jugador2)) {
@@ -220,6 +241,26 @@ class JuegoGato {
                 return;
             }
 
+        }
+    }
+
+    public static void main(String[] args) {
+        while (true) {
+
+        int pos = (int) (Math.random() * 1);
+            System.out.println(pos);
+        }
+    }
+
+    private void colocarIA() {
+        boolean jugada=false;
+        while(!jugada){
+            
+            int posicion = (int)(Math.random() * 9);
+            if(arregloGato[posicion]=='_'){
+                jugada=true;
+                arregloGato[posicion]='O';
+            }
         }
     }
 }

@@ -42,9 +42,9 @@ public class AdministradorGato {
     public void iniciarJuego() {
         jugadorGato.getAyudanteServidor().enviarMensaje("<OK>");
         if (modoSolitario) {
-            jugadorGato.getAyudanteServidor().enviarMensaje("<OK>");
-            JuegoGato juegoGato = new JuegoGato( jugadorGato, null);
-            juegoGato.juegaSolo();
+            jugadorGato.setTieneTurno(true);
+            JuegoGato juegoGato = new JuegoGato( 1,jugadorGato, null);
+            juegoGato.atiendeJugador(jugadorGato);
             return;
         }
         modoCooperativo();
@@ -57,7 +57,7 @@ public class AdministradorGato {
         JuegoGato juegoGato = obtenerJuegoGato();
         if (juegoGato == null) {
             jugadorGato.setTieneTurno(true);
-            juegoGato=new JuegoGato( jugadorGato, null);
+            juegoGato=new JuegoGato(2, jugadorGato, null);
             listaJuegos.add(juegoGato);
             juegoGato.atiendeJugador(jugadorGato);
             return;
