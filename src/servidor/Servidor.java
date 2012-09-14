@@ -5,7 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
-import servidor.ayudante.AyudanteServidor;
+import servidor.ayudante.ManejadorCliente;
 /**
  * 
  * @author Alberto Emmanuel Esquivel Vega
@@ -33,7 +33,7 @@ public class Servidor {
     /**
      * el mapeo de todos los clientes que van entrando a el servidor
      */
-    private Map<Integer,AyudanteServidor> mapeoClientes;
+    private Map<Integer,ManejadorCliente> mapeoClientes;
 
     /**
      * Constructor
@@ -42,7 +42,7 @@ public class Servidor {
     public Servidor(int puerto) {
         this.puerto=puerto;
         sesionesActuales = 0;
-        mapeoClientes=new HashMap<Integer, AyudanteServidor>();
+        mapeoClientes=new HashMap<Integer, ManejadorCliente>();
         crearSocket();
         System.out.println("Servidor comienza a escuchar...");
     }
@@ -66,7 +66,7 @@ public class Servidor {
         while (sesionesActuales < sesionesMaximas) {
             Socket receptor = escucharCanal();
             sesionesActuales++;
-            AyudanteServidor ayudante=new AyudanteServidor(idCliente++,"Thread-"+(sesionesActuales),receptor);
+            ManejadorCliente ayudante=new ManejadorCliente(idCliente++,"Thread-"+(sesionesActuales),receptor);
             mapeoClientes.put(idCliente,ayudante);
             Thread th = new Thread(ayudante);
             th.start();

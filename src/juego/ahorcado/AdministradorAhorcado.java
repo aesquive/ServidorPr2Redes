@@ -1,6 +1,6 @@
 package juego.ahorcado;
 
-import servidor.ayudante.AyudanteServidor;
+import servidor.ayudante.ManejadorCliente;
 import util.Util;
 
 /**
@@ -13,7 +13,7 @@ public class AdministradorAhorcado {
     /**
      * El manejador mas general del cliente
      */
-    private AyudanteServidor ayudanteServidor;
+    private ManejadorCliente manejadorClientes;
     /**
      * Variable que nos dice si el usuario sigue jugando o no
      */
@@ -39,8 +39,8 @@ public class AdministradorAhorcado {
      * Constructor
      * @param ayudanteServidor 
      */
-    public AdministradorAhorcado(AyudanteServidor ayudanteServidor) {
-        this.ayudanteServidor = ayudanteServidor;
+    public AdministradorAhorcado(ManejadorCliente ayudanteServidor) {
+        this.manejadorClientes = ayudanteServidor;
         this.juegoActivo = true;
         generarCadenaAhorcado();
     }
@@ -49,7 +49,7 @@ public class AdministradorAhorcado {
      * metodo que inicia un juego de ahorcado
      */
     public void iniciarJuego() {
-        ayudanteServidor.enviarMensaje("<OK>");
+        manejadorClientes.enviarMensaje("<OK>");
         atenderJuego();
     }
 
@@ -58,7 +58,7 @@ public class AdministradorAhorcado {
      */
     private void atenderJuego() {
         while (juegoActivo) {
-            String mensajeRecibido = ayudanteServidor.leerMensaje();
+            String mensajeRecibido = manejadorClientes.leerMensaje();
             if (mensajeRecibido == null) {
                 juegoActivo = false;
             }
@@ -75,17 +75,17 @@ public class AdministradorAhorcado {
      */
     private void generarRespuesta(String mensaje) {
         if (mensaje.contains("EXIT")) {
-            ayudanteServidor.setOnline(false);
+            manejadorClientes.setOnline(false);
             juegoActivo = false;
             return;
         }
         if (mensaje.contains("QUIT GAME")) {
             juegoActivo = false;
-            ayudanteServidor.enviarMensaje("<OK>");
+            manejadorClientes.enviarMensaje("<OK>");
             return;
         }
         if (mensaje.contains("STATUS GAME")) {
-            ayudanteServidor.enviarMensaje("<" + Util.arrayToString(cadenaOculta) + " " + (numeroMaximoIntentos - numeroIntentosActuales) + ">");
+            manejadorClientes.enviarMensaje("<" + Util.arrayToString(cadenaOculta) + " " + (numeroMaximoIntentos - numeroIntentosActuales) + ">");
             return;
         }
         if (mensaje.contains("TRY_CHAR")) {
@@ -97,7 +97,7 @@ public class AdministradorAhorcado {
             return;
         }
 
-        ayudanteServidor.enviarMensaje("<FAIL 400>");
+        manejadorClientes.enviarMensaje("<FAIL 400>");
     }
 
     /**
@@ -119,12 +119,12 @@ public class AdministradorAhorcado {
         String[] split = mensaje.split("<TRY_CHAR");
         System.out.println(" * " + split);
         if (split.length != 2) {
-            ayudanteServidor.enviarMensaje("<FAIL 301>");
+            manejadorClientes.enviarMensaje("<FAIL 301>");
             return;
         }
         String segundaParte = split[1].trim();
         if(segundaParte.length()==0){
-            ayudanteServidor.enviarMensaje("<FAIL 301>");
+            manejadorClientes.enviarMensaje("<FAIL 301>");
             return;
         }
         for (int t = 0; t < this.cadenaVisible.length; t++) {
@@ -133,7 +133,7 @@ public class AdministradorAhorcado {
             }
         }
         this.numeroIntentosActuales++;
-        ayudanteServidor.enviarMensaje("<OK>");
+        manejadorClientes.enviarMensaje("<OK>");
     }
 
     /**
@@ -143,12 +143,12 @@ public class AdministradorAhorcado {
     private void tryWord(String mensaje) {
         String[] split = mensaje.split("<TRY_WORD");
         if (split.length != 2) {
-            ayudanteServidor.enviarMensaje("<FAIL 300>");
+            manejadorClientes.enviarMensaje("<FAIL 300>");
             return;
         }
         String segundaParte = split[1].trim().substring(0, split[1].trim().length() - 1);
         if(segundaParte.length()==0){
-            ayudanteServidor.enviarMensaje("<FAIL 300>");
+            manejadorClientes.enviarMensaje("<FAIL 300>");
             return;
         }
         for (int t = 0; t < segundaParte.toCharArray().length; t++) {
@@ -156,7 +156,7 @@ public class AdministradorAhorcado {
                 cadenaOculta[t] = segundaParte.charAt(t);
             }
         }
-        ayudanteServidor.enviarMensaje("<OK>");
+        manejadorClientes.enviarMensaje("<OK>");
     }
 
     /**
@@ -164,11 +164,11 @@ public class AdministradorAhorcado {
      */
     private void revisarJuegoTerminado() {
         if (!Util.arregloContiene(this.cadenaOculta, '_') && this.numeroIntentosActuales < numeroMaximoIntentos) {
-            ayudanteServidor.setStatusUltimoJuego("<YOU_WIN>");
+            manejadorClientes.setStatusUltimoJuego("<YOU_WIN>");
             juegoActivo=false;
             return;
         } else if (numeroIntentosActuales > numeroMaximoIntentos) {
-            ayudanteServidor.setStatusUltimoJuego("<YOU_LOSE>");
+            manejadorClientes.setStatusUltimoJuego("<YOU_LOSE>");
             juegoActivo=false;
             return;
         }

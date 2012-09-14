@@ -15,7 +15,7 @@ import util.RWSocket;
  * Clase que se encarga de realizar las tareas de interaccion entre cliente y
  * servidor
  */
-public class AyudanteServidor implements Runnable {
+public class ManejadorCliente implements Runnable {
 
     /**
      * Id del Ayudante
@@ -48,7 +48,7 @@ public class AyudanteServidor implements Runnable {
      * @param nombre
      * @param socket 
      */
-    public AyudanteServidor(int id,String nombre, Socket socket) {
+    public ManejadorCliente(int id,String nombre, Socket socket) {
         this.statusUltimoJuego="<FAIL 400>";
         this.id=id;
         this.nombre = nombre;

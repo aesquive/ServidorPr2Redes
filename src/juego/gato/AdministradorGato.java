@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import servidor.ayudante.AyudanteServidor;
+import servidor.ayudante.ManejadorCliente;
 
 /**
  * Clase que se encarga de administrar todos los juegos de gato
@@ -30,7 +30,7 @@ public class AdministradorGato {
      * @param ayudanteServidor
      * @param modoSolitario 
      */
-    public AdministradorGato(AyudanteServidor ayudanteServidor, boolean modoSolitario) {
+    public AdministradorGato(ManejadorCliente ayudanteServidor, boolean modoSolitario) {
         this.jugadorGato = new JugadorGato(ayudanteServidor);
         this.modoSolitario = modoSolitario;
 

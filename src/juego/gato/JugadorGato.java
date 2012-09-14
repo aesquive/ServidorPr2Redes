@@ -1,6 +1,6 @@
 package juego.gato;
 
-import servidor.ayudante.AyudanteServidor;
+import servidor.ayudante.ManejadorCliente;
 
 /**
  * Clase que es un jugador de gato que mantiene turno , status y saber si aun sigue activo
@@ -24,7 +24,7 @@ public class JugadorGato {
     /**
      * ayudante de servidor que mantiene la conexion con el cliente
      */
-    private AyudanteServidor ayudanteServidor;
+    private ManejadorCliente manejadorClientes;
 
     public final static int STATUS_ENJUEGO=1;
     public final static int STATUS_GANADO=2;
@@ -35,9 +35,9 @@ public class JugadorGato {
      * Constructor
      * @param ayudanteServidor 
      */
-    public JugadorGato(AyudanteServidor ayudanteServidor) {
+    public JugadorGato(ManejadorCliente ayudanteServidor) {
         this.status=STATUS_ENJUEGO;
-        this.ayudanteServidor=ayudanteServidor;
+        this.manejadorClientes=ayudanteServidor;
         this.juegoActivo=true;
     }
     
@@ -73,15 +73,15 @@ public class JugadorGato {
     /**
      * @return the ayudanteServidor
      */
-    public AyudanteServidor getAyudanteServidor() {
-        return ayudanteServidor;
+    public ManejadorCliente getAyudanteServidor() {
+        return manejadorClientes;
     }
 
     /**
      * @param ayudanteServidor the ayudanteServidor to set
      */
-    public void setAyudanteServidor(AyudanteServidor ayudanteServidor) {
-        this.ayudanteServidor = ayudanteServidor;
+    public void setAyudanteServidor(ManejadorCliente ayudanteServidor) {
+        this.manejadorClientes = ayudanteServidor;
     }
 
     /**
