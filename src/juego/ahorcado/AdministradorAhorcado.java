@@ -1,5 +1,11 @@
 package juego.ahorcado;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import servidor.ayudante.ManejadorCliente;
 import util.Util;
 
@@ -10,6 +16,7 @@ import util.Util;
  */
 public class AdministradorAhorcado {
 
+    private static final String nombreArchivo="diccionario.dic";
     /**
      * El manejador mas general del cliente
      */
@@ -74,25 +81,25 @@ public class AdministradorAhorcado {
      * @param mensaje 
      */
     private void generarRespuesta(String mensaje) {
-        if (mensaje.contains("EXIT")) {
+        if (mensaje.contains("<EXIT")) {
             manejadorClientes.setOnline(false);
             juegoActivo = false;
             return;
         }
-        if (mensaje.contains("QUIT GAME")) {
+        if (mensaje.contains("<QUIT GAME")) {
             juegoActivo = false;
             manejadorClientes.enviarMensaje("<OK>");
             return;
         }
-        if (mensaje.contains("STATUS GAME")) {
+        if (mensaje.contains("<STATUS GAME")) {
             manejadorClientes.enviarMensaje("<" + Util.arrayToString(cadenaOculta) + " " + (numeroMaximoIntentos - numeroIntentosActuales) + ">");
             return;
         }
-        if (mensaje.contains("TRY_CHAR")) {
+        if (mensaje.contains("<TRY_CHAR")) {
             tryChar(mensaje);
             return;
         }
-        if (mensaje.contains("TRY_WORD")) {
+        if (mensaje.contains("<TRY_WORD")) {
             tryWord(mensaje);
             return;
         }
@@ -104,7 +111,7 @@ public class AdministradorAhorcado {
      * metodo que genera una cadena aleatoria 
      */
     private void generarCadenaAhorcado() {
-        cadenaVisible = "algo".toCharArray();
+        cadenaVisible = obtenerPalabra().toCharArray();
         cadenaOculta = new char[cadenaVisible.length];
         for (int t = 0; t < cadenaVisible.length; t++) {
             cadenaOculta[t] = '_';
@@ -117,7 +124,6 @@ public class AdministradorAhorcado {
      */
     private void tryChar(String mensaje) {
         String[] split = mensaje.split("<TRY_CHAR");
-        System.out.println(" * " + split);
         if (split.length != 2) {
             manejadorClientes.enviarMensaje("<FAIL 301>");
             return;
@@ -173,5 +179,24 @@ public class AdministradorAhorcado {
             return;
         }
 
+    }
+
+    private String obtenerPalabra() {
+        try {
+            BufferedReader reader=new BufferedReader(new FileReader(nombreArchivo));
+            String linea=reader.readLine();
+            int random=(int)(Math.random()*15);
+            String anterior="";
+            int contador=0;
+            while(linea!=null && contador!=random){
+                anterior=linea;
+                linea=reader.readLine();
+                contador++;
+            }
+            return anterior;
+        } catch (IOException ex) {
+            Logger.getLogger(AdministradorAhorcado.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "";
     }
 }
